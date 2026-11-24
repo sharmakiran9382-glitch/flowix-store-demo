@@ -19,10 +19,8 @@ Tag,
 Eye,
 Plus,
 Minus,
-} from 'lucide-react';
-​export default function HomePage() {
-const mountRef = useRef<HTMLDivElement | null>(null);
-const [settings, setSettings] = useState({
+} from 'lucide-react';​export default function HomePage(){const mountRef = useRef<HTMLDivElement | null>(null);
+const[settings,setSettings]=useStat{
 store_name: 'AURA',
 logo_text: 'Flowix Demo',
 primary_color: '#1c1917',
