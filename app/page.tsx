@@ -467,7 +467,7 @@ export default function HomePage() {
       !shippingAddress.trim() ||
       cart.length === 0
     ) {
-      showToast('Please fill Name, Email, and Delivery Address.');
+      showToast('Please fill Name, Email,Phone Number 1,Phone Number 2 and Delivery Address.');
       return;
     }
     setOrdering(true);
