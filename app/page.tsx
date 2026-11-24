@@ -22,70 +22,65 @@ Tag,
 Eye,
 Plus,
 Minus,
-Sparkles,
-CheckCircle2,
 } from 'lucide-react';
 export default function HomePage() {
 const mountRef = useRef<HTMLDivElement | null>(null);
-// Store Settings State (synced with Supabase store_settings)
 const [settings, setSettings] = useState({
 store_name: 'Flowix Atelier',
-logo_text: 'AURA.',
+logo_text: 'Flowix Demo',
 primary_color: '#1c1917',
-hero_title: 'Next-Gen 3D Commerce Experience',
-announcement: '🚚 FREE SHIPPING ON ORDERS ABOVE ₹1,999 • USE CODE: FLOWIX10 FOR 10% OFF',
+hero_title: 'Shop smarter. Live better.',
+announcement:
+'🚚 FREE SHIPPING ON ORDERS ABOVE ₹1,999 • USE CODE: FLOWIX10 FOR 10% OFF',
 });
-// Products, Category, Sorting & Search State
 const [products, setProducts] = useState<any[]>([]);
 const [selectedCategory, setSelectedCategory] = useState('All');
 const [sortBy, setSortBy] = useState('featured');
 const [searchQuery, setSearchQuery] = useState('');
 const [showSearch, setShowSearch] = useState(false);
-// Wishlist & Quick View Product Modal State
+// Wishlist & Quick View Modal State
 const [wishlist, setWishlist] = useState<number[]>([]);
 const [showWishlistOnly, setShowWishlistOnly] = useState(false);
 const [activeProduct, setActiveProduct] = useState<any | null>(null);
 const [selectedSize, setSelectedSize] = useState('M');
-const [selectedColor, setSelectedColor] = useState('Off-White / Cream');
+const [selectedColor, setSelectedColor] = useState('Obsidian Black');
 const [modalQty, setModalQty] = useState(1);
-// Cart, Coupons & Checkout Drawer State
+// Cart, Coupons & Checkout State
 const [cart, setCart] = useState<any[]>([]);
 const [showCart, setShowCart] = useState(false);
 const [couponInput, setCouponInput] = useState('');
-const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
+const [appliedCoupon, setAppliedCoupon] = useState<{
+code: string;
+discount: number;
+} | null>(null);
 const [availableCoupons, setAvailableCoupons] = useState<any[]>([
 { code: 'FLOWIX10', type: 'percent', value: 10 },
 { code: 'WELCOME200', type: 'flat', value: 200 },
 ]);
-// Customer Checkout Form State
 const [customerName, setCustomerName] = useState('');
 const [customerEmail, setCustomerEmail] = useState('');
 const [customerPhone, setCustomerPhone] = useState('');
 const [shippingAddress, setShippingAddress] = useState('');
 const [paymentMode, setPaymentMode] = useState('Cash on Delivery (COD)');
 const [ordering, setOrdering] = useState(false);
-const [orderSuccessBanner, setOrderSuccessBanner] = useState(false);
-// Clean Toast Notification State (replaces browser alert())
-const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-function triggerToast(message: string, type: 'success' | 'error' = 'success') {
-setToast({ message, type });
-setTimeout(() => {
-setToast((prev) => (prev?.message === message ? null : prev));
-}, 3500);
+const [orderSuccess, setOrderSuccess] = useState(false);
+const [toastMsg, setToastMsg] = useState('');
+function showToast(msg: string) {
+setToastMsg(msg);
+setTimeout(() => setToastMsg(''), 3200);
 }
-// Fallback Demo Products if Supabase table is empty
 const defaultProducts = [
 {
 id: 1,
-title: 'Off-White Full-Sleeve Henley',
+title: 'Essential Heavyweight Boxy Tee',
 category: 'Tshirts',
-price: 1499,
-mrp: 1999,
-rating: 4.9,
-reviews: 138,
+price: 1299,
+mrp: 1799,
+rating: 4.8,
+reviews: 124,
 sizes: ['S', 'M', 'L', 'XL'],
 description:
-'A clean, versatile off-white full-sleeve Henley with a classic button placket. Pairs effortlessly with blue denim and smart footwear for casual outings.',
+'Crafted from 260 GSM 100% combed organic cotton. Features a relaxed drop-shoulder silhouette, ribbed collar, and breathable all-season weave.',
 image_url:
 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
 },
@@ -147,29 +142,43 @@ image_url:
 },
 {
 id: 6,
-title: 'Minimalist Court Leather Sneakers',
-category: 'Sneakers',
-price: 3299,
-mrp: 4299,
+title: 'Minimalist Knit Co-ord Ensemble',
+category: 'Women',
+price: 2999,
+mrp: 3999,
 rating: 4.9,
-reviews: 176,
+reviews: 142,
+sizes: ['XS', 'S', 'M', 'L'],
+description:
+'Soft-touch ribbed knit top paired with high-waisted wide-leg trousers. Designed for elevated comfort from day to evening.',
+image_url:
+'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80',
+},
+{
+id: 7,
+title: 'Court Classic Low-Top Sneakers',
+category: 'Footwear',
+price: 2699,
+mrp: 3499,
+rating: 4.8,
+reviews: 118,
 sizes: ['UK 7', 'UK 8', 'UK 9', 'UK 10'],
 description:
-'Handcrafted low-top court sneakers with cushioned memory-foam footbed, breathable lining, and durable rubber cupsole.',
+'Clean everyday sneakers with cushioned insole, breathable lining, and durable rubber cup sole.',
 image_url:
-'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80',
+'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
 },
 ];
 const categories = [
 {
 name: 'Tshirts',
-count: 'ESSENTIALS & HENLEYS',
+count: 'ESSENTIALS',
 img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=600&q=80',
 },
 {
-name: 'Sneakers',
-count: 'FOOTWEAR',
-img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80',
+name: 'Accessories',
+count: 'CURATED',
+img: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=600&q=80',
 },
 {
 name: 'Hoodies',
@@ -177,20 +186,21 @@ count: 'HEAVYWEIGHT',
 img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80',
 },
 ];
-// Parse packed description/metadata safely from Supabase rows
 function normalizeProduct(raw: any) {
-const desc =
+let desc =
 raw.description ||
 'Premium quality piece crafted with attention to fit, durability, and everyday comfort.';
-const mrp = raw.mrp || Math.round(Number(raw.price || 999) * 1.3);
-const sizes = raw.sizes || ['S', 'M', 'L', 'XL'];
+let mrp = raw.mrp || Math.round(Number(raw.price || 999) * 1.3);
+let sizes = raw.sizes || ['S', 'M', 'L', 'XL'];
 if (typeof raw.title === 'string' && raw.title.includes('||')) {
 const parts = raw.title.split('||');
 return {
 ...raw,
 title: parts[0].trim(),
 mrp: Number(parts[1]) || mrp,
-sizes: parts[2] ? parts[2].split(',').map((s: string) => s.trim()) : sizes,
+sizes: parts[2]
+? parts[2].split(',').map((s: string) => s.trim())
+: sizes,
 description: parts[3] ? parts[3].trim() : desc,
 rating: 4.8,
 reviews: 47,
@@ -213,14 +223,7 @@ try {
 setAvailableCoupons(JSON.parse(savedCoupons));
 } catch {}
 }
-const savedWishlist = localStorage.getItem('flowix_wishlist');
-if (savedWishlist) {
-try {
-setWishlist(JSON.parse(savedWishlist));
-} catch {}
-}
 }, []);
-// 3D Hero Emblem
 useEffect(() => {
 if (!mountRef.current) return;
 const container = mountRef.current;
@@ -270,9 +273,9 @@ if (sData) {
 setSettings((prev) => ({
 ...prev,
 store_name: sData.store_name || 'Flowix Atelier',
-logo_text: sData.logo_text || sData.store_name || 'AURA.',
+logo_text: sData.logo_text || sData.store_name || 'Flowix Demo',
 primary_color: sData.primary_color || '#1c1917',
-hero_title: sData.hero_title || 'Next-Gen 3D Commerce Experience',
+hero_title: sData.hero_title || 'Shop smarter. Live better.',
 }));
 }
 const { data: pData } = await supabase
@@ -291,21 +294,22 @@ setProducts(defaultProducts);
 function openProductModal(item: any) {
 setActiveProduct(item);
 setSelectedSize(item.sizes?.[0] || 'M');
-setSelectedColor('Off-White / Cream');
+setSelectedColor('Obsidian Black');
 setModalQty(1);
 }
 function toggleWishlist(id: number) {
 setWishlist((prev) => {
-const updated = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
-localStorage.setItem('flowix_wishlist', JSON.stringify(updated));
-triggerToast(
-prev.includes(id) ? 'Removed from wishlist' : 'Saved to wishlist',
-'success'
-);
-return updated;
+const exists = prev.includes(id);
+showToast(exists ? 'Removed from Wishlist' : 'Saved to Wishlist');
+return exists ? prev.filter((x) => x !== id) : [...prev, id];
 });
 }
-function addToCartWithDetails(item: any, size = 'M', color = 'Off-White / Cream', qty = 1) {
+function addToCartWithDetails(
+item: any,
+size = 'M',
+color = 'Obsidian Black',
+qty = 1
+) {
 setCart((prev) => [
 ...prev,
 {
@@ -317,19 +321,48 @@ qty,
 ]);
 setActiveProduct(null);
 setShowCart(true);
-triggerToast(${item.title} added to bag!, 'success');
+showToast(${item.title} added to bag);
 }
 function removeFromCart(index: number) {
 setCart((prev) => prev.filter((_, idx) => idx !== index));
 }
-// Dynamic category pills built from both defaults and uploaded Supabase products
+// Dynamic category tabs from defaults + uploaded Supabase products
 const dynamicCategories = [
 'All',
 ...Array.from(
 new Set(products.map((p) => (p.category || '').trim()).filter(Boolean))
 ),
 ];
-// Live filtered + sorted products list
+// Smart search synonyms so searching "shirt", "sandle", "shoes", "watch", etc. matches related items & categories
+const searchSynonyms: Record<string, string[]> = {
+shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top', 'men', 'jacket'],
+shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top', 'men'],
+tshirt: ['tshirt', 'tshirts', 'shirt', 'henley', 'tee'],
+sandle: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes', 'slipper'],
+sandal: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
+sandals: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
+shoes: ['shoes', 'sneakers', 'footwear', 'sandle', 'sandal', 'boots'],
+sneaker: ['sneaker', 'sneakers', 'shoes', 'footwear'],
+sneakers: ['sneakers', 'sneaker', 'shoes', 'footwear'],
+hoodie: ['hoodie', 'hoodies', 'sweatshirt', 'fleece', 'winter'],
+jacket: ['jacket', 'coat', 'trench', 'denim', 'men', 'women'],
+watch: ['watch', 'chrono', 'accessories', 'sunglasses', 'eyewear'],
+jeans: ['jeans', 'denim', 'trousers', 'pants', 'men', 'women'],
+};
+function expandSearchTerms(rawQuery: string): string[] {
+const words = rawQuery
+.toLowerCase()
+.trim()
+.split(/\s+/)
+.filter(Boolean);
+const expanded = new Set<string>(words);
+words.forEach((w) => {
+if (searchSynonyms[w]) {
+searchSynonyms[w].forEach((syn) => expanded.add(syn));
+}
+});
+return Array.from(expanded);
+}
 const filteredProducts = products
 .filter((item) => {
 if (showWishlistOnly && !wishlist.includes(item.id)) return false;
@@ -337,11 +370,10 @@ const matchesCat =
 selectedCategory === 'All' ||
 (item.category || '').toLowerCase() === selectedCategory.toLowerCase();
 const q = searchQuery.trim().toLowerCase();
-const matchesSearch =
-q === '' ||
-(item.title || '').toLowerCase().includes(q) ||
-(item.category || '').toLowerCase().includes(q) ||
-(item.description || '').toLowerCase().includes(q);
+if (q === '') return matchesCat;
+const terms = expandSearchTerms(q);
+const searchableText = ${item.title || ''} ${item.category || ''} ${ item.description || '' }.toLowerCase();
+const matchesSearch = terms.some((term) => searchableText.includes(term));
 return matchesCat && matchesSearch;
 })
 .sort((a, b) => {
@@ -349,7 +381,27 @@ if (sortBy === 'low') return Number(a.price) - Number(b.price);
 if (sortBy === 'high') return Number(b.price) - Number(a.price);
 return 0;
 });
-const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * (item.qty || 1), 0);
+const matchedCategories =
+searchQuery.trim() === ''
+? []
+: dynamicCategories.filter((cat) => {
+if (cat === 'All') return false;
+const terms = expandSearchTerms(searchQuery);
+return terms.some((term) => cat.toLowerCase().includes(term));
+});
+function handleSearchSubmit(e: React.FormEvent) {
+e.preventDefault();
+setSelectedCategory('All');
+setShowWishlistOnly(false);
+const shopEl = document.getElementById('shop');
+if (shopEl) {
+shopEl.scrollIntoView({ behavior: 'smooth' });
+}
+}
+const subtotal = cart.reduce(
+(sum, item) => sum + Number(item.price || 0) * (item.qty || 1),
+0
+);
 const couponDiscount = appliedCoupon ? appliedCoupon.discount : 0;
 const shippingFee = subtotal >= 1999 || subtotal === 0 ? 0 : 99;
 const grandTotal = Math.max(0, subtotal - couponDiscount + shippingFee);
@@ -358,7 +410,7 @@ const code = couponInput.trim().toUpperCase();
 if (!code) return;
 const found = availableCoupons.find((c) => c.code.toUpperCase() === code);
 if (!found) {
-triggerToast('Invalid Coupon Code! Try FLOWIX10 or WELCOME200', 'error');
+showToast('Invalid Coupon Code! Try FLOWIX10 or WELCOME200');
 return;
 }
 const disc =
@@ -366,23 +418,25 @@ found.type === 'percent'
 ? Math.round((subtotal * Number(found.value)) / 100)
 : Number(found.value);
 setAppliedCoupon({ code: found.code, discount: disc });
-triggerToast(Coupon ${found.code} applied! Saved ₹${disc}, 'success');
+showToast(Coupon ${found.code} applied (-₹${disc}));
 }
 async function handleCheckout(e: React.FormEvent) {
 e.preventDefault();
 if (
 !customerEmail.trim() ||
 !customerName.trim() ||
-!customerPhone.trim() ||
 !shippingAddress.trim() ||
 cart.length === 0
 ) {
-triggerToast('Please fill Name, Phone, Email, and Delivery Address.', 'error');
+showToast('Please fill Name, Email, and Delivery Address.');
 return;
 }
 setOrdering(true);
 const itemsList = cart
-.map((c) => ${c.title} [Size: ${c.selectedSize}, Color: ${c.selectedColor}, Qty: ${c.qty}])
+.map(
+(c) =>
+${c.title} [Size: ${c.selectedSize}, Color: ${c.selectedColor}, Qty: ${c.qty}]
+)
 .join(' + ');
 const couponNote = appliedCoupon
 ?  | Coupon: ${appliedCoupon.code} (-₹${appliedCoupon.discount})
@@ -398,42 +452,34 @@ order_status: 'Order Confirmed',
 ]);
 setOrdering(false);
 if (error) {
-triggerToast('Order failed: ' + error.message, 'error');
+showToast('Order failed: ' + error.message);
 } else {
+setOrderSuccess(true);
 setCart([]);
 setAppliedCoupon(null);
 setShowCart(false);
-setOrderSuccessBanner(true);
-triggerToast('Order Confirmed! Track anytime in My Orders.', 'success');
+showToast('Order Confirmed! Track anytime in My Orders.');
+setTimeout(() => setOrderSuccess(false), 6000);
 }
 }
 return (
 <div className="min-h-screen bg-[#f6f5f2] text-stone-900 font-sans">
-{/* Floating Toast Notification */}
-{toast && (
-<div
-className={fixed bottom-5 right-5 z-50 px-4 py-3 text-xs font-semibold tracking-wide text-white shadow-lg flex items-center gap-2 transition-all ${ toast.type === 'error' ? 'bg-red-700' : 'bg-stone-900' }}
->
-<CheckCircle2 className="w-4 h-4 shrink-0" />
-<span>{toast.message}</span>
+{/* Toast Notification Banner */}
+{toastMsg && (
+<div className="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs font-semibold px-4 py-3 shadow-lg flex items-center gap-2">
+<Check className="w-4 h-4 text-emerald-400" />
+<span>{toastMsg}</span>
 </div>
 )}
 {/* Order Confirmation Banner */}
-{orderSuccessBanner && (
-<div className="bg-emerald-900 text-white px-4 py-3 text-xs flex items-center justify-between gap-3">
-<div className="flex items-center gap-2">
-<CheckCircle2 className="w-4 h-4 shrink-0" />
+{orderSuccess && (
+<div className="bg-emerald-800 text-white text-xs px-4 py-3 flex items-center justify-between">
 <span>
-Your order has been placed successfully! View live status in{' '}
-<a href="/orders" className="underline font-bold">
-My Orders
-</a>
-.
+Order Confirmed! Your items are being prepared for dispatch.
 </span>
-</div>
-<button onClick={() => setOrderSuccessBanner(false)} aria-label="Dismiss">
-<X className="w-4 h-4" />
-</button>
+<a href="/orders" className="underline font-bold">
+Track Order →
+</a>
 </div>
 )}
 {/* Top Announcement Bar */}
@@ -451,11 +497,17 @@ ADMIN PANEL
 {/* Main Editorial Navbar */}
 <header className="sticky top-0 z-30 bg-[#f6f5f2]/95 backdrop-blur-md border-b border-stone-200">
 <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-<a href="/" className="text-xl md:text-2xl font-bold tracking-tight text-stone-900">
+<a
+href="/"
+className="text-xl md:text-2xl font-bold tracking-tight text-stone-900"
+>
 {settings.logo_text}
 </a>
 <nav className="hidden md:flex items-center gap-7 text-xs font-semibold tracking-widest uppercase text-stone-600">
-<a href="/" className="text-stone-900 border-b-2 border-stone-900 pb-0.5">
+<a
+href="/"
+className="text-stone-900 border-b-2 border-stone-900 pb-0.5"
+>
 HOME
 </a>
 <a href="#shop" className="hover:text-stone-900">
@@ -494,13 +546,16 @@ className={w-4 h-4 ${ showWishlistOnly ? 'fill-red-600 text-red-600' : '' }}
 </span>
 )}
 </button>
-<a href="/admin" title="Admin Settings" className="p-1.5 text-stone-700 hover:text-stone-950">
+<a
+href="/admin"
+title="Admin Settings"
+className="p-1.5 text-stone-700 hover:text-stone-950"
+>
 <User className="w-4 h-4" />
 </a>
 <button
 onClick={() => setShowCart(true)}
 className="relative p-1.5 text-stone-700 hover:text-stone-950"
-aria-label="Shopping Bag"
 >
 <ShoppingBag className="w-4 h-4" />
 <span className="absolute -top-1 -right-1 bg-stone-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
@@ -515,17 +570,11 @@ aria-label="Shopping Bag"
 <a href="/orders">My Orders</a>
 <a href="/admin">Admin Studio</a>
 </div>
-{/* Expandable Search Bar with Instant Live Results */}
+{/* Expandable Search Bar with Live Dropdown & Auto-Scroll */}
 {showSearch && (
-<div className="border-t border-stone-200 bg-white px-4 py-3 shadow-sm">
+<div className="border-t border-stone-200 bg-white px-4 py-3 shadow-md">
 <form
-onSubmit={(e) => {
-e.preventDefault();
-setSelectedCategory('All');
-setShowWishlistOnly(false);
-const shopEl = document.getElementById('shop');
-if (shopEl) shopEl.scrollIntoView({ behavior: 'smooth' });
-}}
+onSubmit={handleSearchSubmit}
 className="max-w-xl mx-auto flex items-center gap-2"
 >
 <Search className="w-4 h-4 text-stone-400 shrink-0" />
@@ -534,10 +583,10 @@ type="text"
 value={searchQuery}
 onChange={(e) => {
 setSearchQuery(e.target.value);
-if (selectedCategory !== 'All') setSelectedCategory('All');
-if (showWishlistOnly) setShowWishlistOnly(false);
+setSelectedCategory('All');
+setShowWishlistOnly(false);
 }}
-placeholder="Search Henley, sneakers, hoodies, categories..."
+placeholder="Search shirt, sandle, sneakers, henley, hoodie..."
 className="w-full text-sm focus:outline-none"
 autoFocus
 />
@@ -545,21 +594,46 @@ autoFocus
 <button
 type="button"
 onClick={() => setSearchQuery('')}
-className="text-xs text-stone-500 hover:text-stone-900 shrink-0"
+className="text-xs text-stone-500 px-1"
 >
 Clear
 </button>
 )}
 <button
 type="submit"
-className="text-xs font-bold uppercase tracking-wider bg-stone-900 text-white px-3 py-1.5 shrink-0"
+className="px-3 py-1.5 bg-stone-900 text-white text-[11px] font-bold uppercase tracking-wider shrink-0"
 >
 Search
 </button>
 </form>
 {/* Instant Live Dropdown Results */}
 {searchQuery.trim() !== '' && (
-<div className="max-w-xl mx-auto mt-3 border-t border-stone-100 pt-2 max-h-72 overflow-y-auto divide-y divide-stone-100">
+<div className="max-w-xl mx-auto mt-3 border-t border-stone-100 pt-2 max-h-80 overflow-y-auto space-y-2">
+{matchedCategories.length > 0 && (
+<div className="flex flex-wrap items-center gap-1.5 pb-2 border-b border-stone-100">
+<span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+Matching Categories:
+</span>
+{matchedCategories.map((cat) => (
+<button
+key={cat}
+type="button"
+onClick={() => {
+setSelectedCategory(cat);
+setSearchQuery('');
+setShowSearch(false);
+const shopEl = document.getElementById('shop');
+if (shopEl)
+shopEl.scrollIntoView({ behavior: 'smooth' });
+}}
+className="px-2.5 py-1 bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider"
+>
+Explore {cat} →
+</button>
+))}
+</div>
+)}
+<div className="divide-y divide-stone-100">
 {filteredProducts.length > 0 ? (
 filteredProducts.map((item) => (
 <div
@@ -591,53 +665,21 @@ Buy / View →
 </div>
 ))
 ) : (
-<p className="text-xs text-stone-500 py-3 text-center">
-No products found for “{searchQuery}”
+<div className="py-3 text-center space-y-2">
+<p className="text-xs text-stone-500">
+Abhi “{searchQuery}” ka koi item store mein
+add nahi hai.
 </p>
-)}
-</div>
-)}
-</div>
-)}
-</header>
-{/* Editorial Hero Section */}
-<section className="max-w-6xl mx-auto px-4 py-12 md:py-16 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-<div className="md:col-span-7 space-y-5">
-<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500 flex items-center gap-1.5">
-<Sparkles className="w-3.5 h-3.5" /> NEW THIS SEASON • COUPON: FLOWIX10
-</p>
-<h1 className="text-4xl md:text-6xl font-serif font-normal tracking-tight text-stone-900 leading-[1.1]">
-{settings.hero_title}
-</h1>
-<p className="text-stone-600 text-sm md:text-base max-w-md leading-relaxed">
-Discover quality apparel & essentials with size customization, instant promo discounts, and real-time door-to-door delivery tracking.
-</p>
-<div className="flex flex-wrap gap-3 pt-2">
-<a
-href="#shop"
-className="px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition"
-style={{ backgroundColor: settings.primary_color }}
+<button
+type="button"
+onClick={() => {
+setSearchQuery('');
+setSelectedCategory('All');
+setShowSearch(false);
+const shopEl = document.getElementById('shop');
+if (shopEl)
+shopEl.scrollIntoView({ behavior: 'smooth' });
+}}
+className="text-[11px] font-bold uppercase tracking-wider underline text-stone-900"
 >
-SHOP NOW
-</a>
-<a
-href="#categories"
-className="px-6 py-3 text-xs font-bold uppercase tracking-widest border border-stone-300 bg-white text-stone-900 hover:border-stone-900 transition"
->
-BROWSE CATEGORIES
-</a>
-</div>
-</div>
-{/* Right Side 3D Studio Badge */}
-<div className="md:col-span-5 flex flex-col items-center justify-center">
-<div className="w-56 h-56 md:w-64 md:h-64 rounded-full border border-stone-300 bg-white/70 shadow-xs flex flex-col items-center justify-center relative overflow-hidden">
-<div ref={mountRef} className="w-full h-full" />
-<div className="absolute bottom-4 text-center pointer-events-none">
-<span className="block text-sm font-bold tracking-widest text-stone-900">2026</span>
-<span className="block text-[10px] italic text-stone-500">Established</span>
-</div>
-</div>
-</div>
-</section>
-{/* Trust Features Strip */}
-<section className
+Browse All 
