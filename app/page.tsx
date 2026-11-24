@@ -355,7 +355,8 @@ export default function HomePage() {
       new Set(products.map((p) => (p.category || '').trim()).filter(Boolean))
     ),
   ];
-};
+}; 
+
   const searchSynonyms: Record<string, string[]> = {
     shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
     shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
@@ -372,7 +373,7 @@ export default function HomePage() {
     jacket: ['jacket', 'coat', 'trench', 'denim'],
     watch: ['watch', 'chrono', 'accessories', 'sunglasses', 'eyewear'],
     jeans: ['jeans', 'denim', 'trousers', 'pants'],
-  };                        
+  };
   function expandSearchTerms(rawQuery: string): string[] {
     const words = rawQuery
       .toLowerCase()
