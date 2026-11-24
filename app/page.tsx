@@ -356,7 +356,6 @@ export default function HomePage() {
     ),
   ];
 }; 
-
   const searchSynonyms: Record<string, string[]> = {
     shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
     shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
