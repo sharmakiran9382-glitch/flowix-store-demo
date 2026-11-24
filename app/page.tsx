@@ -23,7 +23,7 @@ Minus,
 ​export default function HomePage() {
 const mountRef = useRef<HTMLDivElement | null>(null);
 const [settings, setSettings] = useState({
-store_name: 'Flowix Atelier',
+store_name: 'AURA',
 logo_text: 'Flowix Demo',
 primary_color: '#1c1917',
 hero_title: 'Shop smarter. Live better.',
