@@ -355,24 +355,24 @@ export default function HomePage() {
       new Set(products.map((p) => (p.category || '').trim()).filter(Boolean))
     ),
   ];
-
+};
   const searchSynonyms: Record<string, string[]> = {
-    shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top', 'men', 'jacket'],
-    shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top', 'men'],
+    shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
+    shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
     tshirt: ['tshirt', 'tshirts', 'shirt', 'henley', 'tee'],
-    sandle: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes', 'slipper'],
-    sandles: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes', 'slipper'],
+    sandle: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
+    sandles: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
     sandal: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
     sandals: ['sandle', 'sandal', 'sandals', 'footwear', 'sneakers', 'shoes'],
     shoes: ['shoes', 'sneakers', 'footwear', 'sandle', 'sandal', 'boots'],
+    boots: ['boots', 'boot', 'footwear', 'shoes', 'sneakers'],
     sneaker: ['sneaker', 'sneakers', 'shoes', 'footwear'],
     sneakers: ['sneakers', 'sneaker', 'shoes', 'footwear'],
-    hoodie: ['hoodie', 'hoodies', 'sweatshirt', 'fleece', 'winter'],
-    jacket: ['jacket', 'coat', 'trench', 'denim', 'men', 'women'],
+    hoodie: ['hoodie', 'hoodies', 'sweatshirt', 'fleece'],
+    jacket: ['jacket', 'coat', 'trench', 'denim'],
     watch: ['watch', 'chrono', 'accessories', 'sunglasses', 'eyewear'],
-    jeans: ['jeans', 'denim', 'trousers', 'pants', 'men', 'women'],
-  };
-
+    jeans: ['jeans', 'denim', 'trousers', 'pants'],
+  };                        
   function expandSearchTerms(rawQuery: string): string[] {
     const words = rawQuery
       .toLowerCase()
