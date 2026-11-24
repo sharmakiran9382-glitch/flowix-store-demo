@@ -355,7 +355,6 @@ export default function HomePage() {
       new Set(products.map((p) => (p.category || '').trim()).filter(Boolean))
     ),
   ];
-}; 
   const searchSynonyms: Record<string, string[]> = {
     shirt: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
     shirts: ['shirt', 'tshirt', 'tshirts', 'henley', 'tee', 'top'],
