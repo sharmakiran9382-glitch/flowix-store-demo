@@ -1,9 +1,5 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
-
-export const viewport: Viewport = {
-  themeColor: '#09090b',
-};
 
 export const metadata: Metadata = {
   title: 'AURA',
@@ -50,6 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <meta name="theme-color" content="#09090b" />
+      </head>
       <body className="min-h-screen bg-[#09090b] text-zinc-100 antialiased">
         {children}
       </body>
