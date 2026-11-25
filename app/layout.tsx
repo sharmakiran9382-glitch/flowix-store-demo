@@ -1,8 +1,13 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
+export const viewport: Viewport = {
+  themeColor: '#09090b',
+};
+
 export const metadata: Metadata = {
-  title: 'AURA | Technical Apparel & Footwear',
+  title: 'AURA',
+  applicationName: 'AURA',
   description:
     'Engineered apparel, structured outerwear, cushioned footwear, and everyday gear by AURA & Flowix Studio.',
   keywords: [
@@ -13,6 +18,12 @@ export const metadata: Metadata = {
     'sneakers',
     'Flowix Studio',
   ],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'AURA',
+    statusBarStyle: 'black-translucent',
+  },
   icons: {
     icon: '/aura-logo.svg',
     apple: '/aura-logo.svg',
